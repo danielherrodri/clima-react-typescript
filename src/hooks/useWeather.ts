@@ -1,5 +1,16 @@
 import axios from 'axios'
-import { SearchType } from '../types'
+import { SearchType, Weather } from '../types'
+
+function isWeatherResponse(weather: unknown): weather is Weather {
+    return (
+        Boolean(weather) && typeof weather === 'object' &&
+        typeof (weather as Weather).name === 'string' &&
+        typeof (weather as Weather).main.temp === 'number' &&
+        typeof (weather as Weather).main.temp_max === 'number' &&
+        typeof (weather as Weather).main.temp_min === 'number'
+    )
+}
+
 export default function useWeather() {
 
     const fetchWeather = async (search: SearchType) => {
@@ -13,7 +24,15 @@ export default function useWeather() {
 
             const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appId}`
             const { data: weatherResult } = await axios.get(weatherUrl)
-            console.log(weatherResult)
+
+            const result = isWeatherResponse(weatherResult)
+
+            if (result) {
+                console.log(weatherResult.name)
+            } else {
+                console.log('El objeto está mal formado')
+            }
+
         } catch (error) {
             console.log(error)
         }
