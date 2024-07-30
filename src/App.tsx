@@ -5,9 +5,9 @@ function App() {
     <>
       <h1 className={styles.title}>Buscador de clima</h1>
       <div className={styles.container}>
-        <p>
+        <div>
           <Form />
-        </p>
+        </div>
         <p>2</p>
       </div>
     </>
